@@ -20,4 +20,4 @@ If you need help, please use the links provided on top of this document.
 ## Make broadcast requests
 After the Docker container runs, you'll need to visit a link it gives you, and paste in the access code.
 
-When that is finished, you should now be able to visit `http://localhost/broadcast_message=YOUR MESSAGE HERE` to have Google Assistant broadcast your text message to all your Google Home speakers.
+When that is finished, you should now be able to visit `http://localhost:5000/broadcast_message?message=YOUR MESSAGE HERE` to have Google Assistant broadcast your text message to all your Google Home speakers.
