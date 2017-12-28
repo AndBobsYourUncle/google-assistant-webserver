@@ -43,4 +43,4 @@ Traceback (most recent call last):
 sounddevice.PortAudioError: Error opening RawStream: Invalid sample rate
 ```
 
-Then create a file called asoundrc.config in the same folder as clientid.json and follow the recommandations from https://developers.google.com/assistant/sdk/prototype/getting-started-pi-python/configure-audio. You can launch all these commands directly from the RPI as the configuration is shared with the container.# google-assistant-webserver
+Then create a file called asoundrc.config in the same folder as clientid.json and follow the recommandations from https://developers.google.com/assistant/sdk/prototype/getting-started-pi-python/configure-audio. You can launch all these commands directly from the RPI as the configuration is shared with the container.
