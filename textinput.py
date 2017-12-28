@@ -35,10 +35,27 @@ try:
 except SystemError:
     import assistant_helpers
 
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api
+from json import dumps
+
+app = Flask(__name__)
+api = Api(app)
+assistant = 0
 
 ASSISTANT_API_ENDPOINT = 'embeddedassistant.googleapis.com'
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 
+class BroadcastMessage(Resource):
+    def get(self):
+        message = request.args.get('message', default = 'This is a test!')
+        text_query = 'broadcast "'+message+'"'
+        click.echo('<you> %s' % text_query)
+        display_text = assistant.assist(text_query=text_query)
+        click.echo('<@assistant> %s' % display_text)
+        return {'status': 'OK'}
+
+api.add_resource(BroadcastMessage, '/broadcast_message')
 
 class SampleTextAssistant(object):
     """Sample Assistant that supports text based conversations.
@@ -137,9 +154,12 @@ class SampleTextAssistant(object):
 @click.option('--grpc-deadline', default=DEFAULT_GRPC_DEADLINE,
               metavar='<grpc deadline>', show_default=True,
               help='gRPC deadline in seconds')
+
 def main(api_endpoint, credentials,
          device_model_id, device_id, lang, verbose,
          grpc_deadline, *args, **kwargs):
+    global assistant
+
     # Setup logging.
     logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
 
@@ -161,14 +181,9 @@ def main(api_endpoint, credentials,
         credentials, http_request, api_endpoint)
     logging.info('Connecting to %s', api_endpoint)
 
-    with SampleTextAssistant(lang, device_model_id, device_id,
-                             grpc_channel, grpc_deadline) as assistant:
-        while True:
-            text_query = click.prompt('')
-            click.echo('<you> %s' % text_query)
-            display_text = assistant.assist(text_query=text_query)
-            click.echo('<@assistant> %s' % display_text)
-
+    assistant = SampleTextAssistant(lang, device_model_id, device_id,
+                             grpc_channel, grpc_deadline)
+    app.run(host='0.0.0.0')
 
 if __name__ == '__main__':
     main()

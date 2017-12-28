@@ -40,9 +40,13 @@ RUN python3 -m venv env \
 RUN /env/bin/python -m pip install --upgrade https://github.com/googlesamples/assistant-sdk-python/releases/download/0.3.0/google_assistant_library-0.0.2-py2.py3-none-linux_armv7l.whl \
     && /env/bin/python -m pip install google-assistant-sdk[samples]
 
+RUN /env/bin/python -m pip install --upgrade flask flask-jsonpify flask-restful
+
 ADD assistant_helpers.py /google-assistant
 ADD textinput.py /google-assistant
 ADD clientid.json /google-assistant
+
+EXPOSE 5000
 
 # Auhentication (needs user input) and launch google assistant
 CMD . /env/bin/activate \
